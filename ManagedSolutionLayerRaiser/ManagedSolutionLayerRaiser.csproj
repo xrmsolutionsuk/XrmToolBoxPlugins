@@ -210,7 +210,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BusinessLogic\FileStructureGenerator.cs" />
-    <Compile Include="BusinessLogic\QueryManager.cs" />
     <Compile Include="BusinessLogic\Solution.cs" />
     <Compile Include="BusinessLogic\SolutionManager.cs" />
     <Compile Include="BusinessLogic\SolutionValidator.cs" />

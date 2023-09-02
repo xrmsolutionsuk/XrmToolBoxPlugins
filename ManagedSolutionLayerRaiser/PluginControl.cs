@@ -256,7 +256,7 @@ namespace XrmSolutionsUK.XrmToolBoxPlugins.ManagedSolutionLayerRaiser
                 Message = "Retrieving managed solutions",
                 Work = (worker, args) =>
                 {
-                    EntityCollection results = QueryManager.GetManagedSolutions(tstbSearch.Text.Trim(), Service);
+                    EntityCollection results = SolutionManager.GetManagedSolutions(Service, tstbSearch.Text.Trim());
                     args.Result = results;
                 },
                 PostWorkCallBack = (args) =>
