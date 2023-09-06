@@ -32,12 +32,12 @@
             this.tssPrimarySeparator = new System.Windows.Forms.ToolStripSeparator();
             this.tssSecondarySeparator = new System.Windows.Forms.ToolStripSeparator();
             this.tstbSearch = new System.Windows.Forms.ToolStripTextBox();
-            this.tsbSearch = new System.Windows.Forms.ToolStripButton();
             this.solutionsGridView = new System.Windows.Forms.DataGridView();
             this.tsbClose = new System.Windows.Forms.ToolStripButton();
             this.tsbLoadManagedSolutions = new System.Windows.Forms.ToolStripButton();
             this.tsbRaiseManagedSolution = new System.Windows.Forms.ToolStripButton();
             this.tslFilter = new System.Windows.Forms.ToolStripLabel();
+            this.tsbSearch = new System.Windows.Forms.ToolStripButton();
             this.mainMenu.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.solutionsGridView)).BeginInit();
             this.SuspendLayout();
@@ -76,15 +76,6 @@
             this.tstbSearch.Name = "tstbSearch";
             this.tstbSearch.Size = new System.Drawing.Size(100, 31);
             this.tstbSearch.TextChanged += new System.EventHandler(this.tstbSearch_TextChanged);
-            // 
-            // tsbSearch
-            // 
-            this.tsbSearch.Image = global::XrmSolutionsUK.XrmToolBoxPlugins.ManagedSolutionLayerRaiser.Properties.Resources.icons8_search_94;
-            this.tsbSearch.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.tsbSearch.Name = "tsbSearch";
-            this.tsbSearch.Size = new System.Drawing.Size(70, 28);
-            this.tsbSearch.Text = "Search";
-            this.tsbSearch.Click += new System.EventHandler(this.tsbSearch_Click);
             // 
             // solutionsGridView
             // 
@@ -134,7 +125,16 @@
             this.tslFilter.Size = new System.Drawing.Size(115, 28);
             this.tslFilter.Text = "Filter Solutions: ";
             // 
-            // ManagedSolutionLayerRaiserControl
+            // tsbSearch
+            // 
+            this.tsbSearch.Image = global::XrmSolutionsUK.XrmToolBoxPlugins.ManagedSolutionLayerRaiser.Properties.Resources.icons8_search_94;
+            this.tsbSearch.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsbSearch.Name = "tsbSearch";
+            this.tsbSearch.Size = new System.Drawing.Size(70, 28);
+            this.tsbSearch.Text = "Search";
+            this.tsbSearch.Click += new System.EventHandler(this.tsbSearch_Click);
+            // 
+            // PluginControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -142,7 +142,7 @@
             this.AutoSize = true;
             this.Controls.Add(this.solutionsGridView);
             this.Controls.Add(this.mainMenu);
-            this.Name = "ManagedSolutionLayerRaiserControl";
+            this.Name = "PluginControl";
             this.Size = new System.Drawing.Size(1406, 500);
             this.Load += new System.EventHandler(this.ManagedSolutionLayerRaiserControl_Load);
             this.mainMenu.ResumeLayout(false);

@@ -108,7 +108,12 @@ namespace XrmSolutionsUK.XrmToolBoxPlugins.ManagedSolutionLayerRaiser
                     if (argsDeleteHolding.Error != null)
                     {
                         LogError(string.Format("Error deleting holding managed solution: {0}", argsDeleteHolding.Error.ToString()));
-                        MessageBox.Show(argsDeleteHolding.Error.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        MessageBox.Show(argsDeleteHolding.Error.Message.ToString(), "Error deleting holding managed solution", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                    else
+                    {
+                        var result = MessageBox.Show(string.Format("Solution {0} successfully raised", selectedSolution.UniqueName), "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        ExecuteMethod(LoadManagedSolutions);
                     }
                 }
             });
@@ -140,7 +145,7 @@ namespace XrmSolutionsUK.XrmToolBoxPlugins.ManagedSolutionLayerRaiser
                     if (argsDeleteOriginal.Error != null)
                     {
                         LogError(string.Format("Error deleting original managed solution: {0}", argsDeleteOriginal.Error.ToString()));
-                        MessageBox.Show(argsDeleteOriginal.Error.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        MessageBox.Show(argsDeleteOriginal.Error.Message.ToString(), "Error deleting original managed solution", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                     else
                     {
@@ -176,7 +181,7 @@ namespace XrmSolutionsUK.XrmToolBoxPlugins.ManagedSolutionLayerRaiser
                     if (argImportHolding.Error != null)
                     {
                         LogError(string.Format("Error importing holding managed solution: {0}", argImportHolding.Error.ToString()));
-                        MessageBox.Show(argImportHolding.Error.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        MessageBox.Show(argImportHolding.Error.Message.ToString(), "Error importing holding managed solution", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                     else
                     {
@@ -212,7 +217,7 @@ namespace XrmSolutionsUK.XrmToolBoxPlugins.ManagedSolutionLayerRaiser
                     if (argsReinstallOriginal.Error != null)
                     {
                         LogError(string.Format("Error installing original managed solution: {0}", argsReinstallOriginal.Error.ToString()));
-                        MessageBox.Show(argsReinstallOriginal.Error.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        MessageBox.Show(argsReinstallOriginal.Error.Message.ToString(), "Error installing original managed solution", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                     else
                     {
@@ -238,11 +243,15 @@ namespace XrmSolutionsUK.XrmToolBoxPlugins.ManagedSolutionLayerRaiser
                     if (args.Error != null)
                     {
                         LogError(string.Format("Error raising managed solution layer: {0}", args.Error.ToString()));
-                        MessageBox.Show(args.Error.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        MessageBox.Show(args.Error.Message.ToString(), "Solution Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                     else
                     {
-                        ImportHoldingSolution();
+                        var confirmationResult = MessageBox.Show("The raising of the selected managed solution may take a while to complete and may potentially disrupt normal usage of the target environment. It is recommended that this activity is performed as part of pre-agreed, scheduled and controlled application maintenance out of normal business hours. Are you sure you wish to continue with this process now?", "Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                        if (confirmationResult == DialogResult.Yes)
+                        {
+                            ImportHoldingSolution();
+                        }
                     }
                 }
             });
@@ -263,8 +272,8 @@ namespace XrmSolutionsUK.XrmToolBoxPlugins.ManagedSolutionLayerRaiser
                 {
                     if (args.Error != null)
                     {
-                        LogError(string.Format("Error retrieving managed solution: {0}", args.Error.ToString()));
-                        MessageBox.Show(args.Error.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        LogError(string.Format("Error retrieving managed solutions: {0}", args.Error.ToString()));
+                        MessageBox.Show(args.Error.Message.ToString(), "Error retrieving managed solutions", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                     else
                     {
@@ -359,7 +368,7 @@ namespace XrmSolutionsUK.XrmToolBoxPlugins.ManagedSolutionLayerRaiser
             }
             if (totalChecked == 0)
             {
-                MessageBox.Show("A solution needs to be selected first", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("A solution needs to be selected first to raise", "No solution selected", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             else
             {
@@ -380,18 +389,19 @@ namespace XrmSolutionsUK.XrmToolBoxPlugins.ManagedSolutionLayerRaiser
             }
         }
 
-        private void tstbSearch_TextChanged(object sender, EventArgs e)
-        {
-            tsbSearch.Enabled = (tstbSearch.Text.Trim().Length > 0);
-            if (tstbSearch.Text.Trim().Length == 0)
-            {
-                ExecuteMethod(LoadManagedSolutions);
-            }
-        }
-
         private void tsbSearch_Click(object sender, EventArgs e)
         {
             ExecuteMethod(LoadManagedSolutions);
+        }
+
+        private void tstbSearch_TextChanged(object sender, EventArgs e)
+        {
+            var searchCriteriaEntered = (tstbSearch.Text.Trim().Length > 0);
+            tsbSearch.Enabled = searchCriteriaEntered;
+            if (!searchCriteriaEntered)
+            {
+                ExecuteMethod(LoadManagedSolutions);
+            }
         }
     }
 }

@@ -66,23 +66,17 @@ namespace XrmSolutionsUK.XrmToolBoxPlugins.ManagedSolutionLayerRaiser.BusinessLo
             LinkEntity publisherLink = new LinkEntity("solution", "publisher", "publisherid", "publisherid", JoinOperator.Inner);
             publisherLink.EntityAlias = "publisher";
             publisherLink.Columns = new ColumnSet(new string[] { "publisherid", "uniquename", "friendlyname", "customizationprefix", "customizationoptionvalueprefix" });
-            if (!string.IsNullOrWhiteSpace(filterString))
-            {
-                FilterExpression publisherFilters = new FilterExpression(LogicalOperator.Or);
-                publisherFilters.AddCondition("uniquename", ConditionOperator.Like, string.Format("%{0}%", filterString));
-                publisherFilters.AddCondition("friendlyname", ConditionOperator.Like, string.Format("%{0}%", filterString));
-                publisherFilters.AddCondition("customizationprefix", ConditionOperator.Like, string.Format("%{0}%", filterString));
-                publisherLink.LinkCriteria = publisherFilters;
-            }
             solutionQuery.LinkEntities.Add(publisherLink);
+
             FilterExpression filter = new FilterExpression(LogicalOperator.And);
             filter.AddCondition("ismanaged", ConditionOperator.Equal, true);
             filter.AddCondition("isapimanaged", ConditionOperator.Equal, false);
+            filter.AddCondition("isvisible", ConditionOperator.Equal, true);
             if (!string.IsNullOrWhiteSpace(filterString))
             {
                 FilterExpression subFiler = new FilterExpression(LogicalOperator.Or);
-                subFiler.AddCondition("uniquename", ConditionOperator.Like, string.Format("%{0}%", filterString));
-                subFiler.AddCondition("friendlyname", ConditionOperator.Like, string.Format("%{0}%", filterString));
+                subFiler.AddCondition("uniquename", ConditionOperator.Like, filterString);
+                subFiler.AddCondition("friendlyname", ConditionOperator.Like, filterString);
                 filter.AddFilter(subFiler);
             }
             solutionQuery.Criteria = filter;
