@@ -11,6 +11,7 @@ using System.Xml.Linq;
 using System.Xml.XPath;
 using XrmSolutionsUK.XrmToolBoxPlugins.ManagedSolutionLayerRaiser.BusinessLogic;
 using XrmToolBox.Extensibility;
+using XrmToolBox.Extensibility.Args;
 using XrmToolBox.Extensibility.Interfaces;
 using Solution = XrmSolutionsUK.XrmToolBoxPlugins.ManagedSolutionLayerRaiser.BusinessLogic.Solution;
 
@@ -114,6 +115,7 @@ namespace XrmSolutionsUK.XrmToolBoxPlugins.ManagedSolutionLayerRaiser
                         argsDeleteHolding.Cancel = false;
                     }
                 },
+                IsCancelable = false,
                 PostWorkCallBack = (argsDeleteHolding) =>
                 {
                     if (argsDeleteHolding.Error != null)
@@ -151,6 +153,7 @@ namespace XrmSolutionsUK.XrmToolBoxPlugins.ManagedSolutionLayerRaiser
                         argsDeleteOriginal.Cancel = false;
                     }
                 },
+                IsCancelable = false,
                 PostWorkCallBack = (argsDeleteOriginal) =>
                 {
                     if (argsDeleteOriginal.Error != null)
@@ -187,6 +190,7 @@ namespace XrmSolutionsUK.XrmToolBoxPlugins.ManagedSolutionLayerRaiser
                         argsImportHolding.Cancel = false;
                     }
                 },
+                IsCancelable = false,
                 PostWorkCallBack = (argImportHolding) =>
                 {
                     if (argImportHolding.Error != null)
@@ -223,6 +227,7 @@ namespace XrmSolutionsUK.XrmToolBoxPlugins.ManagedSolutionLayerRaiser
                         argsReinstallOriginal.Cancel = false;
                     }
                 },
+                IsCancelable = false,
                 PostWorkCallBack = (argsReinstallOriginal) =>
                 {
                     if (argsReinstallOriginal.Error != null)
@@ -249,6 +254,7 @@ namespace XrmSolutionsUK.XrmToolBoxPlugins.ManagedSolutionLayerRaiser
                 {
                     ValidateSelectedSolution(args);
                 },
+                IsCancelable = false,
                 PostWorkCallBack = (args) =>
                 {
                     if (args.Error != null)
@@ -279,6 +285,7 @@ namespace XrmSolutionsUK.XrmToolBoxPlugins.ManagedSolutionLayerRaiser
                     EntityCollection results = SolutionManager.GetManagedSolutions(Service, tstbSearch.Text.Trim());
                     args.Result = results;
                 },
+                IsCancelable = false,
                 PostWorkCallBack = (args) =>
                 {
                     if (args.Error != null)

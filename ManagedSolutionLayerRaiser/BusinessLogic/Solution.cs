@@ -14,7 +14,6 @@ namespace XrmSolutionsUK.XrmToolBoxPlugins.ManagedSolutionLayerRaiser.BusinessLo
         private string _publisherUniqueName;
         private string _publisherFriendlyName;
         private DateTime _installedOn;
-        private DateTime _uppdatedOn;
 
         [DisplayName("Solution ID")]
         public Guid ID
@@ -120,19 +119,6 @@ namespace XrmSolutionsUK.XrmToolBoxPlugins.ManagedSolutionLayerRaiser.BusinessLo
             }
         }
 
-        [DisplayName("Updated On")]
-        public DateTime UpdatedOn
-        {
-            get
-            {
-                return _uppdatedOn;
-            }
-            set
-            {
-                _uppdatedOn = value;
-            }
-        }
-
         public Solution(Entity solutionRecord)
         {
             this.ID = (Guid)solutionRecord.GetAttributeValue<Guid>("solutionid");
@@ -143,7 +129,6 @@ namespace XrmSolutionsUK.XrmToolBoxPlugins.ManagedSolutionLayerRaiser.BusinessLo
             this.PublisherFriendlyName = solutionRecord.GetAttributeValue<AliasedValue>("publisher.friendlyname").Value.ToString();
             this.Version = solutionRecord.GetAttributeValue<string>("version");
             this.InstalledOn = solutionRecord.GetAttributeValue<DateTime>("installedon");
-            this.UpdatedOn = solutionRecord.GetAttributeValue<DateTime>("updatedon");
         }
     }
 }
