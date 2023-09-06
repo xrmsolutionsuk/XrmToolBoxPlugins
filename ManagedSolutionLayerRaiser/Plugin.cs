@@ -21,8 +21,12 @@ namespace XrmSolutionsUK.XrmToolBoxPlugins.ManagedSolutionLayerRaiser
         ExportMetadata("BackgroundColor", "LightCyan"),
         ExportMetadata("PrimaryFontColor", "Black"),
         ExportMetadata("SecondaryFontColor", "Gray")]
-    public class Plugin : PluginBase
+    public class Plugin : PluginBase, IPayPalPlugin
     {
+        public string DonationDescription => "Thank you for using the Managed Solution Layer Raiser XrmToolBox plugin. If you have found it helpful, please consider making a donation";
+
+        public string EmailAccount => "parvezghumra@gmail.com";
+
         public override IXrmToolBoxPluginControl GetControl()
         {
             return new PluginControl();

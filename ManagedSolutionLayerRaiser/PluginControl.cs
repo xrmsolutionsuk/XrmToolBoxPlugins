@@ -11,16 +11,27 @@ using System.Xml.Linq;
 using System.Xml.XPath;
 using XrmSolutionsUK.XrmToolBoxPlugins.ManagedSolutionLayerRaiser.BusinessLogic;
 using XrmToolBox.Extensibility;
+using XrmToolBox.Extensibility.Interfaces;
 using Solution = XrmSolutionsUK.XrmToolBoxPlugins.ManagedSolutionLayerRaiser.BusinessLogic.Solution;
 
 namespace XrmSolutionsUK.XrmToolBoxPlugins.ManagedSolutionLayerRaiser
 {
-    public partial class PluginControl : PluginControlBase
+    public partial class PluginControl : PluginControlBase, IGitHubPlugin, IPayPalPlugin, IHelpPlugin
     {
         private Settings mySettings;
         private BindingSource solutionsBindingSource = new BindingSource();
         OpenFileDialog selectSolutionFileDialog;
         BusinessLogic.Solution selectedSolution = null;
+
+        public string RepositoryName => "XrmToolBoxPlugins";
+
+        public string UserName => "xrmsolutionsuk";
+
+        public string DonationDescription => "Thank you for using the Managed Solution Layer Raiser XrmToolBox plugin. If you have found it helpful, please consider making a donation";
+
+        public string EmailAccount => "parvezghumra@gmail.com";
+
+        public string HelpUrl => "https://www.xrmsolutionsuk.com/blog/managed-solution-layer-raiser/";
 
         public PluginControl()
         {
