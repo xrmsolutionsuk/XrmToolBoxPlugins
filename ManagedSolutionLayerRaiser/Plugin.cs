@@ -25,7 +25,7 @@ namespace XrmSolutionsUK.XrmToolBoxPlugins.ManagedSolutionLayerRaiser
     {
         public string DonationDescription => "Thank you for using the Managed Solution Layer Raiser XrmToolBox plugin. If you have found it helpful, please consider making a donation";
 
-        public string EmailAccount => "parvezghumra@gmail.com";
+        public string EmailAccount => "info@xrmsolutionsuk.com";
 
         public override IXrmToolBoxPluginControl GetControl()
         {

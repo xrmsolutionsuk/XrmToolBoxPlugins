@@ -29,15 +29,16 @@
         private void InitializeComponent()
         {
             this.mainMenu = new System.Windows.Forms.ToolStrip();
-            this.tssPrimarySeparator = new System.Windows.Forms.ToolStripSeparator();
-            this.tssSecondarySeparator = new System.Windows.Forms.ToolStripSeparator();
-            this.tstbSearch = new System.Windows.Forms.ToolStripTextBox();
-            this.solutionsGridView = new System.Windows.Forms.DataGridView();
             this.tsbClose = new System.Windows.Forms.ToolStripButton();
+            this.tssPrimarySeparator = new System.Windows.Forms.ToolStripSeparator();
             this.tsbLoadManagedSolutions = new System.Windows.Forms.ToolStripButton();
             this.tsbRaiseManagedSolution = new System.Windows.Forms.ToolStripButton();
+            this.tssSecondarySeparator = new System.Windows.Forms.ToolStripSeparator();
             this.tslFilter = new System.Windows.Forms.ToolStripLabel();
+            this.tstbSearch = new System.Windows.Forms.ToolStripTextBox();
+            this.tscbPublisher = new System.Windows.Forms.ToolStripComboBox();
             this.tsbSearch = new System.Windows.Forms.ToolStripButton();
+            this.solutionsGridView = new System.Windows.Forms.DataGridView();
             this.mainMenu.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.solutionsGridView)).BeginInit();
             this.SuspendLayout();
@@ -53,45 +54,13 @@
             this.tssSecondarySeparator,
             this.tslFilter,
             this.tstbSearch,
+            this.tscbPublisher,
             this.tsbSearch});
             this.mainMenu.Location = new System.Drawing.Point(0, 0);
             this.mainMenu.Name = "mainMenu";
             this.mainMenu.Size = new System.Drawing.Size(1406, 31);
             this.mainMenu.TabIndex = 4;
             this.mainMenu.Text = "mainMenu";
-            // 
-            // tssPrimarySeparator
-            // 
-            this.tssPrimarySeparator.Name = "tssPrimarySeparator";
-            this.tssPrimarySeparator.Size = new System.Drawing.Size(6, 31);
-            // 
-            // tssSecondarySeparator
-            // 
-            this.tssSecondarySeparator.Name = "tssSecondarySeparator";
-            this.tssSecondarySeparator.Size = new System.Drawing.Size(6, 31);
-            // 
-            // tstbSearch
-            // 
-            this.tstbSearch.Font = new System.Drawing.Font("Segoe UI", 9F);
-            this.tstbSearch.Name = "tstbSearch";
-            this.tstbSearch.Size = new System.Drawing.Size(100, 31);
-            this.tstbSearch.TextChanged += new System.EventHandler(this.tstbSearch_TextChanged);
-            // 
-            // solutionsGridView
-            // 
-            this.solutionsGridView.AllowUserToAddRows = false;
-            this.solutionsGridView.AllowUserToDeleteRows = false;
-            this.solutionsGridView.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells;
-            this.solutionsGridView.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
-            this.solutionsGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.solutionsGridView.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.solutionsGridView.Location = new System.Drawing.Point(0, 31);
-            this.solutionsGridView.MultiSelect = false;
-            this.solutionsGridView.Name = "solutionsGridView";
-            this.solutionsGridView.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.solutionsGridView.Size = new System.Drawing.Size(1406, 469);
-            this.solutionsGridView.TabIndex = 5;
-            this.solutionsGridView.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.solutionsGridView_CellContentClick);
             // 
             // tsbClose
             // 
@@ -100,6 +69,11 @@
             this.tsbClose.Size = new System.Drawing.Size(110, 28);
             this.tsbClose.Text = "Close this tool";
             this.tsbClose.Click += new System.EventHandler(this.tsbClose_Click);
+            // 
+            // tssPrimarySeparator
+            // 
+            this.tssPrimarySeparator.Name = "tssPrimarySeparator";
+            this.tssPrimarySeparator.Size = new System.Drawing.Size(6, 31);
             // 
             // tsbLoadManagedSolutions
             // 
@@ -118,12 +92,32 @@
             this.tsbRaiseManagedSolution.Text = "Raise Managed Solution";
             this.tsbRaiseManagedSolution.Click += new System.EventHandler(this.tsbRaiseManagedSolution_Click);
             // 
+            // tssSecondarySeparator
+            // 
+            this.tssSecondarySeparator.Name = "tssSecondarySeparator";
+            this.tssSecondarySeparator.Size = new System.Drawing.Size(6, 31);
+            // 
             // tslFilter
             // 
             this.tslFilter.Image = global::XrmSolutionsUK.XrmToolBoxPlugins.ManagedSolutionLayerRaiser.Properties.Resources.icons8_filter_48;
             this.tslFilter.Name = "tslFilter";
             this.tslFilter.Size = new System.Drawing.Size(115, 28);
             this.tslFilter.Text = "Filter Solutions: ";
+            // 
+            // tstbSearch
+            // 
+            this.tstbSearch.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.tstbSearch.Name = "tstbSearch";
+            this.tstbSearch.Size = new System.Drawing.Size(100, 31);
+            this.tstbSearch.TextChanged += new System.EventHandler(this.tstbSearch_TextChanged);
+            // 
+            // tscbPublisher
+            // 
+            this.tscbPublisher.Items.AddRange(new object[] {
+            "Select Publisher"});
+            this.tscbPublisher.Name = "tscbPublisher";
+            this.tscbPublisher.Size = new System.Drawing.Size(121, 31);
+            this.tscbPublisher.SelectedIndexChanged += new System.EventHandler(this.tscbPublisher_SelectedIndexChanged);
             // 
             // tsbSearch
             // 
@@ -133,6 +127,22 @@
             this.tsbSearch.Size = new System.Drawing.Size(70, 28);
             this.tsbSearch.Text = "Search";
             this.tsbSearch.Click += new System.EventHandler(this.tsbSearch_Click);
+            // 
+            // solutionsGridView
+            // 
+            this.solutionsGridView.AllowUserToAddRows = false;
+            this.solutionsGridView.AllowUserToDeleteRows = false;
+            this.solutionsGridView.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells;
+            this.solutionsGridView.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
+            this.solutionsGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.solutionsGridView.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.solutionsGridView.Location = new System.Drawing.Point(0, 31);
+            this.solutionsGridView.MultiSelect = false;
+            this.solutionsGridView.Name = "solutionsGridView";
+            this.solutionsGridView.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.solutionsGridView.Size = new System.Drawing.Size(1406, 469);
+            this.solutionsGridView.TabIndex = 5;
+            this.solutionsGridView.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.solutionsGridView_CellContentClick);
             // 
             // PluginControl
             // 
@@ -164,5 +174,6 @@
         private System.Windows.Forms.ToolStripSeparator tssSecondarySeparator;
         private System.Windows.Forms.ToolStripTextBox tstbSearch;
         private System.Windows.Forms.ToolStripButton tsbSearch;
+        private System.Windows.Forms.ToolStripComboBox tscbPublisher;
     }
 }

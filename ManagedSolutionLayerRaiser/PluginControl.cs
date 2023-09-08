@@ -22,7 +22,8 @@ namespace XrmSolutionsUK.XrmToolBoxPlugins.ManagedSolutionLayerRaiser
         private Settings mySettings;
         private BindingSource solutionsBindingSource = new BindingSource();
         OpenFileDialog selectSolutionFileDialog;
-        BusinessLogic.Solution selectedSolution = null;
+        Solution selectedSolution = null;
+        Publisher selectedPublisher = null;
 
         public string RepositoryName => "XrmToolBoxPlugins";
 
@@ -54,7 +55,7 @@ namespace XrmSolutionsUK.XrmToolBoxPlugins.ManagedSolutionLayerRaiser
             {
                 LogInfo("Settings found and loaded");
             }
-
+            ExecuteMethod(LoadPublishers);
             ExecuteMethod(LoadManagedSolutions);
         }
 
@@ -67,6 +68,7 @@ namespace XrmSolutionsUK.XrmToolBoxPlugins.ManagedSolutionLayerRaiser
         {
             // The ExecuteMethod method handles connecting to an
             // organization if XrmToolBox is not yet connected
+            ExecuteMethod(LoadPublishers);
             ExecuteMethod(LoadManagedSolutions);
         }
 
@@ -273,6 +275,48 @@ namespace XrmSolutionsUK.XrmToolBoxPlugins.ManagedSolutionLayerRaiser
                 }
             });
         }
+
+        private void LoadPublishers()
+        {
+            LogInfo("Retrieving publishers");
+            CrmServiceClient.MaxConnectionTimeout = new TimeSpan(0, 120, 0);
+            WorkAsync(new WorkAsyncInfo
+            {
+                Message = "Retrieving publishers",
+                Work = (worker, args) =>
+                {
+                    EntityCollection results = PublisherManager.GetPublishers(Service);
+                    args.Result = results;
+                },
+                IsCancelable = false,
+                PostWorkCallBack = (args) =>
+                {
+                    if (args.Error != null)
+                    {
+                        LogError(string.Format("Error retrieving publishers: {0}", args.Error.ToString()));
+                        MessageBox.Show(args.Error.Message.ToString(), "Error retrieving publishers", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                    else
+                    {
+                        var results = args.Result as EntityCollection;
+                        LogInfo(string.Format("Successfully retrieved {0} publishers", results.Entities.Count));
+                        if (results != null)
+                        {
+                            SortableBindingList<Publisher> publishers = new SortableBindingList<Publisher>();
+                            foreach (Entity publisherRow in results.Entities)
+                            {
+                                Publisher publisher = new Publisher(publisherRow);
+                                publishers.Add(publisher);
+
+                                tscbPublisher.Items.Add(publisher);
+                            }
+                            tscbPublisher.ComboBox.DisplayMember = "FriendlyName";
+                            tscbPublisher.ComboBox.ValueMember = "ID";
+                        }
+                    }
+                }
+            });
+        }
         private void LoadManagedSolutions()
         {
             LogInfo("Retrieving managed solutions");
@@ -282,7 +326,7 @@ namespace XrmSolutionsUK.XrmToolBoxPlugins.ManagedSolutionLayerRaiser
                 Message = "Retrieving managed solutions",
                 Work = (worker, args) =>
                 {
-                    EntityCollection results = SolutionManager.GetManagedSolutions(Service, tstbSearch.Text.Trim());
+                    EntityCollection results = SolutionManager.GetManagedSolutions(Service, tstbSearch.Text.Trim(), selectedPublisher);
                     args.Result = results;
                 },
                 IsCancelable = false,
@@ -415,11 +459,22 @@ namespace XrmSolutionsUK.XrmToolBoxPlugins.ManagedSolutionLayerRaiser
         private void tstbSearch_TextChanged(object sender, EventArgs e)
         {
             var searchCriteriaEntered = (tstbSearch.Text.Trim().Length > 0);
-            tsbSearch.Enabled = searchCriteriaEntered;
-            if (!searchCriteriaEntered)
+            var publisherSelected = (selectedPublisher != null);
+            tsbSearch.Enabled = searchCriteriaEntered || publisherSelected;
+            if (!searchCriteriaEntered && !publisherSelected)
             {
                 ExecuteMethod(LoadManagedSolutions);
             }
+        }
+
+        private void tscbPublisher_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            selectedPublisher = tscbPublisher.SelectedItem as Publisher;
+            var searchCriteriaEntered = (tstbSearch.Text.Trim().Length > 0);
+            var publisherSelected = (selectedPublisher != null);
+            tsbSearch.Enabled = searchCriteriaEntered || publisherSelected;
+            ExecuteMethod(LoadManagedSolutions);
+           
         }
     }
 }

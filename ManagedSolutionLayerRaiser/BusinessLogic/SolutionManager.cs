@@ -56,7 +56,7 @@ namespace XrmSolutionsUK.XrmToolBoxPlugins.ManagedSolutionLayerRaiser.BusinessLo
             }
         }
 
-        internal static EntityCollection GetManagedSolutions(IOrganizationService orgService, string filterString)
+        internal static EntityCollection GetManagedSolutions(IOrganizationService orgService, string filterString, Publisher publisher)
         {
             QueryExpression solutionQuery = new QueryExpression("solution");
             solutionQuery.NoLock = true;
@@ -78,6 +78,10 @@ namespace XrmSolutionsUK.XrmToolBoxPlugins.ManagedSolutionLayerRaiser.BusinessLo
                 subFiler.AddCondition("uniquename", ConditionOperator.Like, filterString);
                 subFiler.AddCondition("friendlyname", ConditionOperator.Like, filterString);
                 filter.AddFilter(subFiler);
+            }
+            if (publisher != null)
+            {
+                filter.AddCondition("publisherid", ConditionOperator.Equal, publisher.ID);
             }
             solutionQuery.Criteria = filter;
             PagingInfo pagingInfo = new PagingInfo();
