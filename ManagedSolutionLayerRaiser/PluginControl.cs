@@ -92,6 +92,7 @@ namespace XrmSolutionsUK.XrmToolBoxPlugins.ManagedSolutionLayerRaiser
                     File.Delete("HoldingSolution.zip");
                 }
                 ZipFile.CreateFromDirectory("Holding Solution", "HoldingSolution.zip");
+                Directory.Delete("Holding Solution", true);
                 args.Result = true;
             }
         }
@@ -195,6 +196,7 @@ namespace XrmSolutionsUK.XrmToolBoxPlugins.ManagedSolutionLayerRaiser
                 IsCancelable = false,
                 PostWorkCallBack = (argImportHolding) =>
                 {
+                    File.Delete("HoldingSolution.zip");
                     if (argImportHolding.Error != null)
                     {
                         LogError(string.Format("Error importing holding managed solution: {0}", argImportHolding.Error.ToString()));
@@ -232,6 +234,7 @@ namespace XrmSolutionsUK.XrmToolBoxPlugins.ManagedSolutionLayerRaiser
                 IsCancelable = false,
                 PostWorkCallBack = (argsReinstallOriginal) =>
                 {
+                    File.Delete("OriginalSolution.zip");
                     if (argsReinstallOriginal.Error != null)
                     {
                         LogError(string.Format("Error installing original managed solution: {0}", argsReinstallOriginal.Error.ToString()));
