@@ -1,5 +1,5 @@
 # XrmToolBox Plugins published by Xrm Solutions UK
-This repository contains the source code for XrmToolBox plugins created and published by Xrm Solutions UK for general use by the community. It includes the plugins detailed in the following sections
+This repository contains the source code for [XrmToolBox](https://www.xrmtoolbox.com/) plugins created and published by [Xrm Solutions UK](https://www.xrmsolutionsuk.com) for general use by the community. It includes the plugins detailed in the following sections
 
 ## Managed Solution Layer Raiser
 The _Managed Solution Layer Raiser_ plugin allows you to quickly and easily raise your organization-owned managed solutions to the top of the stack of managed layers to resolve environmental inconsistency and make your applications behave as designed.
