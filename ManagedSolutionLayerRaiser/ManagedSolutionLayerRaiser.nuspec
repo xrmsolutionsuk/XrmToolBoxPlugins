@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>$id$</id>
+    <version>$version$</version>
+    <title>$title$</title>
+    <authors>$author$</authors>
+    <owners>$author$</owners>
+    <projectUrl>https://github.com/xrmsolutionsuk/XrmToolBoxPlugins</projectUrl>
+    <!--<iconUrl>http://ICON_URL_HERE_OR_DELETE_THIS_LINE</iconUrl>-->
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>$description$</description>
+    <releaseNotes>Initial release of Managed Solution Layer Raiser XrmToolBox Plugin</releaseNotes>
+    <copyright>Copyright 2023</copyright>
+    <tags>XrmToolBox Managed Solution Layer Raiser Plugin XRM Solutions UK Parvez Ghumra</tags>
+  </metadata>
+</package>

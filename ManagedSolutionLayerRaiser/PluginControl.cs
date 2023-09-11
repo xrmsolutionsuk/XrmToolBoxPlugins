@@ -17,7 +17,7 @@ using Solution = XrmSolutionsUK.XrmToolBoxPlugins.ManagedSolutionLayerRaiser.Bus
 
 namespace XrmSolutionsUK.XrmToolBoxPlugins.ManagedSolutionLayerRaiser
 {
-    public partial class PluginControl : PluginControlBase, IGitHubPlugin, IPayPalPlugin, IHelpPlugin, ISettingsPlugin
+    public partial class PluginControl : PluginControlBase, IGitHubPlugin, IPayPalPlugin, IHelpPlugin
     {
         private Settings mySettings;
         private BindingSource solutionsBindingSource = new BindingSource();
@@ -492,11 +492,6 @@ namespace XrmSolutionsUK.XrmToolBoxPlugins.ManagedSolutionLayerRaiser
             tsbSearch.Enabled = searchCriteriaEntered || publisherSelected;
             ExecuteMethod(LoadManagedSolutions);
            
-        }
-
-        public void ShowSettings()
-        {
-            throw new NotImplementedException();
         }
     }
 }
