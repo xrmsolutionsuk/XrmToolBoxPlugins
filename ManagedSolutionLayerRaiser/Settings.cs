@@ -14,6 +14,6 @@ namespace XrmSolutionsUK.XrmToolBoxPlugins.ManagedSolutionLayerRaiser
     /// </remarks>
     public class Settings
     {
-        public string LastUsedOrganizationWebappUrl { get; set; }
+        public string DefaultPathForTemporaryFiles { get; set; }
     }
 }

@@ -213,6 +213,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BusinessLogic\FilePathSettings.cs" />
     <Compile Include="BusinessLogic\FileStructureGenerator.cs" />
     <Compile Include="BusinessLogic\Publisher.cs" />
     <Compile Include="BusinessLogic\PublisherManager.cs" />

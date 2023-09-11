@@ -6,6 +6,7 @@ using Microsoft.Xrm.Tooling.Connector;
 using System;
 using System.IO;
 using System.Threading;
+using System.Web.Services.Description;
 
 namespace XrmSolutionsUK.XrmToolBoxPlugins.ManagedSolutionLayerRaiser.BusinessLogic
 {
@@ -37,7 +38,16 @@ namespace XrmSolutionsUK.XrmToolBoxPlugins.ManagedSolutionLayerRaiser.BusinessLo
 
         internal static bool DeleteSolution(IOrganizationService orgService, string solutionUniqueName)
         {
-            CrmServiceClient.MaxConnectionTimeout = new TimeSpan(5, 0, 0);
+            var orgServiceProxy = ((CrmServiceClient)orgService).OrganizationServiceProxy;
+            if (orgServiceProxy != null)
+            {
+                orgServiceProxy.Timeout = new TimeSpan(0, 120, 0);
+            }
+            var orgWebProxyClient = ((CrmServiceClient)orgService).OrganizationWebProxyClient;
+            if (orgWebProxyClient != null)
+            {
+                orgWebProxyClient.InnerChannel.OperationTimeout = new TimeSpan(0, 120, 0);
+            }
             QueryExpression query = new QueryExpression("solution");
             query.NoLock = true;
             query.ColumnSet = new ColumnSet(new string[] { "solutionid", "uniquename" });

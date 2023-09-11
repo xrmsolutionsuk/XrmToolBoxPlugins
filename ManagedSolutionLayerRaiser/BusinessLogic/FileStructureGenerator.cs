@@ -10,30 +10,40 @@ namespace XrmSolutionsUK.XrmToolBoxPlugins.ManagedSolutionLayerRaiser.BusinessLo
 {
     internal static class FileStructureGenerator
     {
-        internal static string GenerateFileStructure(string selectedFileName) 
+        internal static FilePathSettings GenerateFileStructure(string selectedFileName, Settings mySettings) 
         {
-            if (File.Exists("OriginalSolution.zip"))
+            string originalSolutionFilePath = string.Format("{0}OriginalSolution.zip", mySettings.DefaultPathForTemporaryFiles);
+            string holdingSolutionFilePath = string.Format("{0}HoldingSolution.zip", mySettings.DefaultPathForTemporaryFiles);
+            string extractedSolutionFolderPath = string.Format("{0}Holding Solution", mySettings.DefaultPathForTemporaryFiles);
+            if (File.Exists(originalSolutionFilePath))
             {
-                File.Delete("OriginalSolution.zip");
+                File.Delete(originalSolutionFilePath);
             }
-            File.Copy(selectedFileName, "OriginalSolution.zip", true);
-            if (Directory.Exists("Holding Solution"))
+            File.Copy(selectedFileName, originalSolutionFilePath, true);
+            if (Directory.Exists(extractedSolutionFolderPath))
             {
-                Directory.Delete("Holding Solution", true);
+                Directory.Delete(extractedSolutionFolderPath, true);
             }
-            Directory.CreateDirectory("Holding Solution");
-            ZipFile.ExtractToDirectory("OriginalSolution.zip", "Holding Solution");
+            Directory.CreateDirectory(extractedSolutionFolderPath);
+            ZipFile.ExtractToDirectory(originalSolutionFilePath, extractedSolutionFolderPath);
 
             string solutionXmlLocation = string.Empty;
-            if (File.Exists("Holding Solution\\solution.xml"))
+            if (File.Exists(string.Format("{0}\\solution.xml", extractedSolutionFolderPath)))
             {
-                solutionXmlLocation = "Holding Solution\\Solution.xml";
+                solutionXmlLocation = string.Format("{0}\\Solution.xml", extractedSolutionFolderPath);
             }
             else
             {
-                solutionXmlLocation = "Holding Solution\\Other\\Solution.xml";
+                solutionXmlLocation = string.Format("{0}\\Other\\Solution.xml", extractedSolutionFolderPath);
             }
-            return solutionXmlLocation;
+
+            FilePathSettings fpS = new FilePathSettings();
+            fpS.SolutionXmlFileLocation = solutionXmlLocation;
+            fpS.OriginalSolutionFilePath = originalSolutionFilePath;
+            fpS.ExtractedSolutionFolderPath = extractedSolutionFolderPath;
+            fpS.HoldingSolutionFilePath = holdingSolutionFilePath;
+
+            return fpS;
         }
     }
 }

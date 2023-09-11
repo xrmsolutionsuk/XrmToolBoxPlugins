@@ -17,13 +17,14 @@ using Solution = XrmSolutionsUK.XrmToolBoxPlugins.ManagedSolutionLayerRaiser.Bus
 
 namespace XrmSolutionsUK.XrmToolBoxPlugins.ManagedSolutionLayerRaiser
 {
-    public partial class PluginControl : PluginControlBase, IGitHubPlugin, IPayPalPlugin, IHelpPlugin
+    public partial class PluginControl : PluginControlBase, IGitHubPlugin, IPayPalPlugin, IHelpPlugin, ISettingsPlugin
     {
         private Settings mySettings;
         private BindingSource solutionsBindingSource = new BindingSource();
         OpenFileDialog selectSolutionFileDialog;
         Solution selectedSolution = null;
         Publisher selectedPublisher = null;
+        FilePathSettings fps;
 
         public string RepositoryName => "XrmToolBoxPlugins";
 
@@ -43,11 +44,13 @@ namespace XrmSolutionsUK.XrmToolBoxPlugins.ManagedSolutionLayerRaiser
         private void ManagedSolutionLayerRaiserControl_Load(object sender, EventArgs e)
         {
             ShowInfoNotification("This tool performs solution imports and deletions in the target environment. Please ensure you use an account with system administrator privileges - ideally the account that you typically use for solution deployments", null);
-
+            
             // Loads or creates the settings for the plugin
-            if (!SettingsManager.Instance.TryLoad(GetType(), out mySettings))
+            if (!SettingsManager.Instance.TryLoad(typeof(XrmSolutionsUK.XrmToolBoxPlugins.ManagedSolutionLayerRaiser.PluginControl), out mySettings))
             {
                 mySettings = new Settings();
+                mySettings.DefaultPathForTemporaryFiles = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+                SettingsManager.Instance.Save(typeof(XrmSolutionsUK.XrmToolBoxPlugins.ManagedSolutionLayerRaiser.PluginControl), mySettings);
 
                 LogWarning("Settings not found => a new settings file has been created!");
             }
@@ -74,8 +77,8 @@ namespace XrmSolutionsUK.XrmToolBoxPlugins.ManagedSolutionLayerRaiser
 
         private void ValidateSelectedSolution(DoWorkEventArgs args)
         {
-            string solutionXmlLocation = FileStructureGenerator.GenerateFileStructure(selectSolutionFileDialog.FileName);
-            var solutionDoc = XDocument.Load(solutionXmlLocation);
+            this.fps = FileStructureGenerator.GenerateFileStructure(selectSolutionFileDialog.FileName, mySettings);
+            var solutionDoc = XDocument.Load(fps.SolutionXmlFileLocation);
             bool isValid = SolutionValidator.IsValid(solutionDoc, selectedSolution);
             if (!isValid)
             {
@@ -86,13 +89,13 @@ namespace XrmSolutionsUK.XrmToolBoxPlugins.ManagedSolutionLayerRaiser
             else
             {
                 solutionDoc.XPathSelectElement("/ImportExportXml/SolutionManifest/UniqueName").Value = selectedSolution.UniqueName + "_Holding";
-                solutionDoc.Save(solutionXmlLocation);
-                if (File.Exists("HoldingSolution.zip"))
+                solutionDoc.Save(fps.SolutionXmlFileLocation);
+                if (File.Exists(fps.HoldingSolutionFilePath))
                 {
-                    File.Delete("HoldingSolution.zip");
+                    File.Delete(fps.HoldingSolutionFilePath);
                 }
-                ZipFile.CreateFromDirectory("Holding Solution", "HoldingSolution.zip");
-                Directory.Delete("Holding Solution", true);
+                ZipFile.CreateFromDirectory(fps.ExtractedSolutionFolderPath, fps.HoldingSolutionFilePath);
+                Directory.Delete(fps.ExtractedSolutionFolderPath, true);
                 args.Result = true;
             }
         }
@@ -129,6 +132,7 @@ namespace XrmSolutionsUK.XrmToolBoxPlugins.ManagedSolutionLayerRaiser
                     else
                     {
                         var result = MessageBox.Show(string.Format("Solution {0} successfully raised", selectedSolution.UniqueName), "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        ExecuteMethod(LoadPublishers);
                         ExecuteMethod(LoadManagedSolutions);
                     }
                 }
@@ -180,7 +184,7 @@ namespace XrmSolutionsUK.XrmToolBoxPlugins.ManagedSolutionLayerRaiser
                 Message = string.Format("Step 1 of 4: Importing holding version of {0} managed solution", selectedSolution.UniqueName),
                 Work = (worker, argsImportHolding) =>
                 {
-                    bool success = SolutionManager.ImportSolution(Service, "HoldingSolution.zip");
+                    bool success = SolutionManager.ImportSolution(Service, fps.HoldingSolutionFilePath);
                     if (!success)
                     {
                         argsImportHolding.Result = false;
@@ -196,7 +200,7 @@ namespace XrmSolutionsUK.XrmToolBoxPlugins.ManagedSolutionLayerRaiser
                 IsCancelable = false,
                 PostWorkCallBack = (argImportHolding) =>
                 {
-                    File.Delete("HoldingSolution.zip");
+                    File.Delete(fps.HoldingSolutionFilePath);
                     if (argImportHolding.Error != null)
                     {
                         LogError(string.Format("Error importing holding managed solution: {0}", argImportHolding.Error.ToString()));
@@ -218,7 +222,7 @@ namespace XrmSolutionsUK.XrmToolBoxPlugins.ManagedSolutionLayerRaiser
                 Message = string.Format("Step 3 of 4: Importing {0} managed solution", selectedSolution.UniqueName),
                 Work = (worker, argsReinstallOriginal) =>
                 {
-                    bool success = SolutionManager.ImportSolution(Service, "OriginalSolution.zip");
+                    bool success = SolutionManager.ImportSolution(Service, fps.OriginalSolutionFilePath);
                     if (!success)
                     {
                         argsReinstallOriginal.Result = false;
@@ -234,7 +238,7 @@ namespace XrmSolutionsUK.XrmToolBoxPlugins.ManagedSolutionLayerRaiser
                 IsCancelable = false,
                 PostWorkCallBack = (argsReinstallOriginal) =>
                 {
-                    File.Delete("OriginalSolution.zip");
+                    File.Delete(fps.OriginalSolutionFilePath);
                     if (argsReinstallOriginal.Error != null)
                     {
                         LogError(string.Format("Error installing original managed solution: {0}", argsReinstallOriginal.Error.ToString()));
@@ -251,7 +255,6 @@ namespace XrmSolutionsUK.XrmToolBoxPlugins.ManagedSolutionLayerRaiser
         private void ProcessSelectedFile()
         {
             LogInfo(string.Format("Raising managed solution layer for {0} solution", selectedSolution.UniqueName));
-            CrmServiceClient.MaxConnectionTimeout = new TimeSpan(0, 120, 0);
             WorkAsync(new WorkAsyncInfo
             {
                 Message = string.Format("Raising managed solution layer for {0} solution", selectedSolution.UniqueName),
@@ -282,7 +285,6 @@ namespace XrmSolutionsUK.XrmToolBoxPlugins.ManagedSolutionLayerRaiser
         private void LoadPublishers()
         {
             LogInfo("Retrieving publishers");
-            CrmServiceClient.MaxConnectionTimeout = new TimeSpan(0, 120, 0);
             WorkAsync(new WorkAsyncInfo
             {
                 Message = "Retrieving publishers",
@@ -303,6 +305,7 @@ namespace XrmSolutionsUK.XrmToolBoxPlugins.ManagedSolutionLayerRaiser
                     {
                         var results = args.Result as EntityCollection;
                         LogInfo(string.Format("Successfully retrieved {0} publishers", results.Entities.Count));
+                        tscbPublisher.Items.Clear();
                         if (results != null)
                         {
                             SortableBindingList<Publisher> publishers = new SortableBindingList<Publisher>();
@@ -323,7 +326,6 @@ namespace XrmSolutionsUK.XrmToolBoxPlugins.ManagedSolutionLayerRaiser
         private void LoadManagedSolutions()
         {
             LogInfo("Retrieving managed solutions");
-            CrmServiceClient.MaxConnectionTimeout = new TimeSpan(0, 120, 0);
             WorkAsync(new WorkAsyncInfo
             {
                 Message = "Retrieving managed solutions",
@@ -393,9 +395,21 @@ namespace XrmSolutionsUK.XrmToolBoxPlugins.ManagedSolutionLayerRaiser
 
             if (mySettings != null && detail != null)
             {
-                mySettings.LastUsedOrganizationWebappUrl = detail.WebApplicationUrl;
-                LogInfo("Connection has changed to: {0}", detail.WebApplicationUrl);
+                ShowInfoNotification("This tool performs solution imports and deletions in the target environment. Please ensure you use an account with system administrator privileges - ideally the account that you typically use for solution deployments", null);
 
+                // Loads or creates the settings for the plugin
+                if (!SettingsManager.Instance.TryLoad(typeof(XrmSolutionsUK.XrmToolBoxPlugins.ManagedSolutionLayerRaiser.PluginControl), out mySettings))
+                {
+                    mySettings = new Settings();
+                    mySettings.DefaultPathForTemporaryFiles = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+                    SettingsManager.Instance.Save(typeof(XrmSolutionsUK.XrmToolBoxPlugins.ManagedSolutionLayerRaiser.PluginControl), mySettings);
+                    LogWarning("Settings not found => a new settings file has been created!");
+                }
+                else
+                {
+                    LogInfo("Settings found and loaded");
+                }
+                ExecuteMethod(LoadPublishers);
                 ExecuteMethod(LoadManagedSolutions);
             }
         }
@@ -478,6 +492,11 @@ namespace XrmSolutionsUK.XrmToolBoxPlugins.ManagedSolutionLayerRaiser
             tsbSearch.Enabled = searchCriteriaEntered || publisherSelected;
             ExecuteMethod(LoadManagedSolutions);
            
+        }
+
+        public void ShowSettings()
+        {
+            throw new NotImplementedException();
         }
     }
 }
