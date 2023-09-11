@@ -7,11 +7,17 @@
     <authors>$author$</authors>
     <owners>$author$</owners>
     <projectUrl>https://github.com/xrmsolutionsuk/XrmToolBoxPlugins</projectUrl>
-    <!--<iconUrl>http://ICON_URL_HERE_OR_DELETE_THIS_LINE</iconUrl>-->
+    <iconUrl>https://www.xrmsolutionsuk.com/wp-content/uploads/2023/07/Icon.png</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>$description$</description>
     <releaseNotes>Initial release of Managed Solution Layer Raiser XrmToolBox Plugin</releaseNotes>
-    <copyright>Copyright 2023</copyright>
+    <copyright>$copyright$</copyright>
     <tags>XrmToolBox Managed Solution Layer Raiser Plugin XRM Solutions UK Parvez Ghumra</tags>
+    <dependencies>
+      <dependency id="XrmToolBox" version="1.2023.7.65"></dependency>
+    </dependencies>
   </metadata>
+  <!--<files>
+    <file src="bin\Release\Plugins\XrmSolutionsUK.XrmToolBoxPlugins.ManagedSolutionLayerRaiser.dll" target="lib\net48\Plugins"/>
+  </files>-->
 </package>

@@ -8,9 +8,9 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("Managed Solution Layer Raiser")]
 [assembly: AssemblyDescription("Quickly and easily raise your organization-owned managed solutions to the top of the stack of managed layers to resolve environmental inconsistency and make your application behave as designed")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Parvez Ghumra @ Xrm Solutions UK")]
+[assembly: AssemblyCompany("Parvez Ghumra @ XRM Solutions UK")]
 [assembly: AssemblyProduct("Managed Solution Layer Raiser")]
-[assembly: AssemblyCopyright("Copyright © 2023")]
+[assembly: AssemblyCopyright("Copyright XRM Solutions UK © 2023")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
