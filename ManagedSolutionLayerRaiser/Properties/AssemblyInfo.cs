@@ -1,12 +1,11 @@
 ﻿using System.Reflection;
-using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("Managed Solution Layer Raiser")]
-[assembly: AssemblyDescription("Quickly and easily raise your organization-owned managed solutions to the top of the stack of managed layers to resolve environmental inconsistency and make your application behave as designed")]
+[assembly: AssemblyDescription("Quickly, easily and safely raise your organization-owned managed solutions to the top of the stack of managed layers to resolve environmental inconsistency and make your application behave as designed")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Parvez Ghumra @ XRM Solutions UK")]
 [assembly: AssemblyProduct("Managed Solution Layer Raiser")]
@@ -32,5 +31,5 @@ using System.Runtime.InteropServices;
 // You can specify all the values or you can default the Build and Revision Numbers 
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("1.2023.9.1")]
-[assembly: AssemblyFileVersion("1.2023.9.1")]
+[assembly: AssemblyVersion("1.2024.8.1")]
+[assembly: AssemblyFileVersion("1.2024.8.1")]

@@ -7,17 +7,21 @@
     <authors>$author$</authors>
     <owners>$author$</owners>
     <projectUrl>https://github.com/xrmsolutionsuk/XrmToolBoxPlugins</projectUrl>
-    <iconUrl>https://www.xrmsolutionsuk.com/wp-content/uploads/2023/07/Icon.png</iconUrl>
+    <icon>Resources\Icon.png</icon>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>$description$</description>
-    <releaseNotes>Initial release of Managed Solution Layer Raiser XrmToolBox Plugin</releaseNotes>
+    <releaseNotes>
+      19/08/2024 - Improved reliability and resilience of Managed Solution Layer Raiser XrmToolBox tool using asynchronous solution uninstallation logic and prechecks of solution existence before performing installation/uninstallation to enable skipping of steps if not necessary
+      12/09/2023 - Version 1.2023.9.1 of Managed Solution Layer Raiser XrmToolBox tool released</releaseNotes>
     <copyright>$copyright$</copyright>
-    <tags>XrmToolBox Managed Solution Layer Raiser Plugin XRM Solutions UK Parvez Ghumra</tags>
+    <tags>XrmToolBox ManagedSolution SolutionFramework</tags>
     <dependencies>
-      <dependency id="XrmToolBox" version="1.2023.7.65"></dependency>
+      <dependency id="XrmToolBox" version="1.2023.10.67"></dependency>
     </dependencies>
   </metadata>
-  <!--<files>
-    <file src="bin\Release\Plugins\XrmSolutionsUK.XrmToolBoxPlugins.ManagedSolutionLayerRaiser.dll" target="lib\net48\Plugins"/>
-  </files>-->
+  <files>
+    <!--<file src="bin\Release\Plugins\XrmSolutionsUK.XrmToolBoxPlugins.ManagedSolutionLayerRaiser.dll" target="lib\net48\Plugins"/>
+    <file src="bin\Release\Plugins\XrmSolutionsUK.XrmToolBoxPlugins.ManagedSolutionLayerRaiser.pdb" target="lib\net48\Plugins"/>
+    <file src="Resources\Icon.png" target="bin\Debug\Plugins"/>-->
+  </files>
 </package>

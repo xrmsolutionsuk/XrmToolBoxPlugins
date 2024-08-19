@@ -1,7 +1,5 @@
 ﻿using McTools.Xrm.Connection;
 using Microsoft.Xrm.Sdk;
-using Microsoft.Xrm.Sdk.Organization;
-using Microsoft.Xrm.Tooling.Connector;
 using System;
 using System.ComponentModel;
 using System.IO;
@@ -11,7 +9,6 @@ using System.Xml.Linq;
 using System.Xml.XPath;
 using XrmSolutionsUK.XrmToolBoxPlugins.ManagedSolutionLayerRaiser.BusinessLogic;
 using XrmToolBox.Extensibility;
-using XrmToolBox.Extensibility.Args;
 using XrmToolBox.Extensibility.Interfaces;
 using Solution = XrmSolutionsUK.XrmToolBoxPlugins.ManagedSolutionLayerRaiser.BusinessLogic.Solution;
 
@@ -44,7 +41,7 @@ namespace XrmSolutionsUK.XrmToolBoxPlugins.ManagedSolutionLayerRaiser
         private void ManagedSolutionLayerRaiserControl_Load(object sender, EventArgs e)
         {
             ShowInfoNotification("This tool performs solution imports and deletions in the target environment. Please ensure you use an account with system administrator privileges - ideally the account that you typically use for solution deployments", null);
-            
+
             // Loads or creates the settings for the plugin
             if (!SettingsManager.Instance.TryLoad(typeof(XrmSolutionsUK.XrmToolBoxPlugins.ManagedSolutionLayerRaiser.PluginControl), out mySettings))
             {
@@ -184,7 +181,7 @@ namespace XrmSolutionsUK.XrmToolBoxPlugins.ManagedSolutionLayerRaiser
                 Message = string.Format("Step 1 of 4: Importing holding version of {0} managed solution", selectedSolution.UniqueName),
                 Work = (worker, argsImportHolding) =>
                 {
-                    bool success = SolutionManager.ImportSolution(Service, fps.HoldingSolutionFilePath);
+                    bool success = SolutionManager.ImportSolution(Service, fps.HoldingSolutionFilePath, selectedSolution.UniqueName + "_Holding");
                     if (!success)
                     {
                         argsImportHolding.Result = false;
@@ -222,7 +219,7 @@ namespace XrmSolutionsUK.XrmToolBoxPlugins.ManagedSolutionLayerRaiser
                 Message = string.Format("Step 3 of 4: Importing {0} managed solution", selectedSolution.UniqueName),
                 Work = (worker, argsReinstallOriginal) =>
                 {
-                    bool success = SolutionManager.ImportSolution(Service, fps.OriginalSolutionFilePath);
+                    bool success = SolutionManager.ImportSolution(Service, fps.OriginalSolutionFilePath, selectedSolution.UniqueName);
                     if (!success)
                     {
                         argsReinstallOriginal.Result = false;
@@ -491,7 +488,7 @@ namespace XrmSolutionsUK.XrmToolBoxPlugins.ManagedSolutionLayerRaiser
             var publisherSelected = (selectedPublisher != null);
             tsbSearch.Enabled = searchCriteriaEntered || publisherSelected;
             ExecuteMethod(LoadManagedSolutions);
-           
+
         }
     }
 }
