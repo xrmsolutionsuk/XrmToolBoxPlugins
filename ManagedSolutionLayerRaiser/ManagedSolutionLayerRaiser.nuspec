@@ -20,8 +20,6 @@
     </dependencies>
   </metadata>
   <files>
-    <!--<file src="bin\Release\Plugins\XrmSolutionsUK.XrmToolBoxPlugins.ManagedSolutionLayerRaiser.dll" target="lib\net48\Plugins"/>
-    <file src="bin\Release\Plugins\XrmSolutionsUK.XrmToolBoxPlugins.ManagedSolutionLayerRaiser.pdb" target="lib\net48\Plugins"/>
-    <file src="Resources\Icon.png" target="bin\Debug\Plugins"/>-->
+    <file src="Resources\Icon.png" target="Resources\"/>
   </files>
 </package>

@@ -154,14 +154,14 @@
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Resources\Icon.png" />
+    <Content Include="Resources\Icon.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>IF NOT EXIST Plugins mkdir Plugins
-xcopy "$(TargetDir)$(TargetFileName)" "$(TargetDir)Plugins\" /Y
-xcopy "$(TargetDir)$(TargetName).pdb" "$(TargetDir)Plugins\" /Y
-xcopy "$(ProjectDir)Resources\Icon.png" "$(TargetDir)Plugins\" /Y</PostBuildEvent>
+    <PostBuildEvent>
+    </PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.  
