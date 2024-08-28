@@ -21,5 +21,7 @@
   </metadata>
   <files>
     <file src="Resources\Icon.png" target="Resources\"/>
+    <file src="bin\Debug\XrmSolutionsUK.XrmToolBoxPlugins.ManagedSolutionLayerRaiser.dll" target="lib\net48\Plugins"/>
+    <file src="bin\Debug\XrmSolutionsUK.XrmToolBoxPlugins.ManagedSolutionLayerRaiser.pdb" target="lib\net48\Plugins"/>
   </files>
 </package>
