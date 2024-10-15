@@ -9,6 +9,7 @@ namespace XrmSolutionsUK.XrmToolBoxPlugins.ManagedSolutionLayerRaiser.BusinessLo
         private Guid _iD;
         private bool _isSelected;
         private string _uniqueName;
+        private string _originalSolutionName;
         private string _friendlyName;
         private string _version;
         private string _publisherUniqueName;
@@ -51,6 +52,19 @@ namespace XrmSolutionsUK.XrmToolBoxPlugins.ManagedSolutionLayerRaiser.BusinessLo
             set
             {
                 _uniqueName = value;
+            }
+        }
+
+        [DisplayName("Original Solution Name")]
+        public string OriginalSolutionName
+        {
+            get
+            {
+                return _originalSolutionName;
+            }
+            set
+            {
+                _originalSolutionName = value;
             }
         }
 
@@ -124,6 +138,14 @@ namespace XrmSolutionsUK.XrmToolBoxPlugins.ManagedSolutionLayerRaiser.BusinessLo
             this.ID = (Guid)solutionRecord.GetAttributeValue<Guid>("solutionid");
             this.IsSelected = false;
             this.UniqueName = solutionRecord.GetAttributeValue<string>("uniquename");
+            if (this.UniqueName.EndsWith("_Holding"))
+            {
+                this.OriginalSolutionName = this.UniqueName.Split('_')[0];
+            }
+            else
+            {
+                this.OriginalSolutionName = this.UniqueName;
+            }
             this.FriendlyName = solutionRecord.GetAttributeValue<string>("friendlyname");
             this.PublisherUniqueName = solutionRecord.GetAttributeValue<AliasedValue>("publisher.uniquename").Value.ToString();
             this.PublisherFriendlyName = solutionRecord.GetAttributeValue<AliasedValue>("publisher.friendlyname").Value.ToString();

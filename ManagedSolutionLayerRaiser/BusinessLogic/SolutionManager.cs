@@ -9,21 +9,28 @@ namespace XrmSolutionsUK.XrmToolBoxPlugins.ManagedSolutionLayerRaiser.BusinessLo
 {
     internal static class SolutionManager
     {
-        internal static bool SolutionExists(IOrganizationService orgService, string solutionUniqueName)
+        internal static bool SolutionExists(IOrganizationService orgService, string solutionUniqueName, out DateTime? installDate)
         {
             QueryExpression query = new QueryExpression("solution");
             query.NoLock = true;
-            query.ColumnSet = new ColumnSet(new string[] { "solutionid", "uniquename" });
+            query.ColumnSet = new ColumnSet(new string[] { "solutionid", "uniquename", "installedon" });
             FilterExpression filter = new FilterExpression(LogicalOperator.And);
             filter.AddCondition("uniquename", ConditionOperator.Equal, solutionUniqueName);
             query.Criteria = filter;
             EntityCollection solutions = orgService.RetrieveMultiple(query);
-            return (solutions.Entities.Count > 0);
+            if (solutions.Entities.Count > 0)
+            {
+                installDate = (DateTime)solutions.Entities[0]["installedon"];
+                return true;
+            }
+            installDate = DateTime.MinValue;
+            return false;
         }
 
         internal static bool ImportSolution(IOrganizationService orgService, string solutionFilePath, string solutionUniqueName)
         {
-            if (SolutionExists(orgService, solutionUniqueName))
+            DateTime? installDate = DateTime.MinValue;
+            if (SolutionExists(orgService, solutionUniqueName, out installDate))
             {
                 return true;
             }
@@ -51,8 +58,8 @@ namespace XrmSolutionsUK.XrmToolBoxPlugins.ManagedSolutionLayerRaiser.BusinessLo
 
         internal static bool DeleteSolution(IOrganizationService orgService, string solutionUniqueName)
         {
-
-            if (!SolutionExists(orgService, solutionUniqueName))
+            DateTime? installDate = DateTime.MinValue;
+            if (!SolutionExists(orgService, solutionUniqueName, out installDate))
             {
                 return true;
             }

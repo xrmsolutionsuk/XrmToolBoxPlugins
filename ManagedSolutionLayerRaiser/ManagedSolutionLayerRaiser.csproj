@@ -81,6 +81,7 @@
     <Compile Include="BusinessLogic\PublisherManager.cs" />
     <Compile Include="BusinessLogic\Solution.cs" />
     <Compile Include="BusinessLogic\SolutionManager.cs" />
+    <Compile Include="BusinessLogic\SolutionRaisingStatus.cs" />
     <Compile Include="BusinessLogic\SolutionValidator.cs" />
     <Compile Include="BusinessLogic\SortableBindingList.cs" />
     <Compile Include="Plugin.cs" />
@@ -158,13 +159,7 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>IF NOT EXIST Plugins mkdir Plugins
-
-copy "$(TargetDir)$(TargetFileName)" "$(TargetDir)Plugins\" /Y
-
-copy "$(TargetDir)$(TargetName).pdb" "$(TargetDir)Plugins\" /Y
-
-nuget pack "$(ProjectPath)" -Symbols -Properties Configuration=$(ConfigurationName)</PostBuildEvent>
+    <PostBuildEvent>nuget pack "..\..\ManagedSolutionLayerRaiser.nuspec" -Symbols -Properties Configuration=$(ConfigurationName)</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.  

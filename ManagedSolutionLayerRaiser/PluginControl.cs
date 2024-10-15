@@ -99,18 +99,27 @@ namespace XrmSolutionsUK.XrmToolBoxPlugins.ManagedSolutionLayerRaiser
 
         private void DeleteHoldingSolution()
         {
-            LogInfo(string.Format("Step 4 of 4: Deleting {0} holding managed solution", selectedSolution.UniqueName));
+            LogInfo(string.Format("Step 4 of 4: Deleting {0} holding managed solution", selectedSolution.OriginalSolutionName));
             WorkAsync(new WorkAsyncInfo
             {
-                Message = string.Format("Step 4 of 4: Deleting {0} holding managed solution", selectedSolution.UniqueName),
+                Message = string.Format("Step 4 of 4: Deleting {0} holding managed solution", selectedSolution.OriginalSolutionName),
                 Work = (worker, argsDeleteHolding) =>
                 {
-                    bool success = SolutionManager.DeleteSolution(Service, selectedSolution.UniqueName + "_Holding");
-                    if (!success)
+                    SolutionRaisingStatus raisingStatus = SolutionValidator.GetSolutionRaisingStatus(Service, selectedSolution.OriginalSolutionName);
+                    if (raisingStatus == SolutionRaisingStatus.HoldingSolutionInstalledOriginalSolutionReinstalled)
                     {
-                        argsDeleteHolding.Result = false;
-                        argsDeleteHolding.Cancel = true;
-                        throw new Exception("Delete of holding solution failed or cancelled");
+                        bool success = SolutionManager.DeleteSolution(Service, selectedSolution.OriginalSolutionName + "_Holding");
+                        if (!success)
+                        {
+                            argsDeleteHolding.Result = false;
+                            argsDeleteHolding.Cancel = true;
+                            throw new Exception("Delete of holding solution failed or cancelled");
+                        }
+                        else
+                        {
+                            argsDeleteHolding.Result = true;
+                            argsDeleteHolding.Cancel = false;
+                        }
                     }
                     else
                     {
@@ -128,7 +137,7 @@ namespace XrmSolutionsUK.XrmToolBoxPlugins.ManagedSolutionLayerRaiser
                     }
                     else
                     {
-                        var result = MessageBox.Show(string.Format("Solution {0} successfully raised", selectedSolution.UniqueName), "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        var result = MessageBox.Show(string.Format("Solution {0} successfully raised", selectedSolution.OriginalSolutionName), "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         ExecuteMethod(LoadPublishers);
                         ExecuteMethod(LoadManagedSolutions);
                     }
@@ -138,18 +147,27 @@ namespace XrmSolutionsUK.XrmToolBoxPlugins.ManagedSolutionLayerRaiser
 
         private void DeleteOriginalSolution()
         {
-            LogInfo(string.Format("Step 2 of 4: Deleting {0} managed solution", selectedSolution.UniqueName));
+            LogInfo(string.Format("Step 2 of 4: Deleting {0} managed solution", selectedSolution.OriginalSolutionName));
             WorkAsync(new WorkAsyncInfo
             {
-                Message = string.Format("Step 2 of 4: Deleting {0} managed solution", selectedSolution.UniqueName),
+                Message = string.Format("Step 2 of 4: Deleting {0} managed solution", selectedSolution.OriginalSolutionName),
                 Work = (worker, argsDeleteOriginal) =>
                 {
-                    bool success = SolutionManager.DeleteSolution(Service, selectedSolution.UniqueName);
-                    if (!success)
+                    SolutionRaisingStatus raisingStatus = SolutionValidator.GetSolutionRaisingStatus(Service, selectedSolution.OriginalSolutionName);
+                    if (raisingStatus == SolutionRaisingStatus.HoldingSolutionInstalledOriginalSolutionNotUninstalled)
                     {
-                        argsDeleteOriginal.Result = false;
-                        argsDeleteOriginal.Cancel = true;
-                        throw new Exception("Delete of original solution failed or cancelled");
+                        bool success = SolutionManager.DeleteSolution(Service, selectedSolution.OriginalSolutionName);
+                        if (!success)
+                        {
+                            argsDeleteOriginal.Result = false;
+                            argsDeleteOriginal.Cancel = true;
+                            throw new Exception("Delete of original solution failed or cancelled");
+                        }
+                        else
+                        {
+                            argsDeleteOriginal.Result = true;
+                            argsDeleteOriginal.Cancel = false;
+                        }
                     }
                     else
                     {
@@ -175,18 +193,27 @@ namespace XrmSolutionsUK.XrmToolBoxPlugins.ManagedSolutionLayerRaiser
 
         private void ImportHoldingSolution()
         {
-            LogInfo(string.Format("Step 1 of 4: Importing holding version of {0} managed solution", selectedSolution.UniqueName));
+            LogInfo(string.Format("Step 1 of 4: Importing holding version of {0} managed solution", selectedSolution.OriginalSolutionName));
             WorkAsync(new WorkAsyncInfo
             {
-                Message = string.Format("Step 1 of 4: Importing holding version of {0} managed solution", selectedSolution.UniqueName),
+                Message = string.Format("Step 1 of 4: Importing holding version of {0} managed solution", selectedSolution.OriginalSolutionName),
                 Work = (worker, argsImportHolding) =>
                 {
-                    bool success = SolutionManager.ImportSolution(Service, fps.HoldingSolutionFilePath, selectedSolution.UniqueName + "_Holding");
-                    if (!success)
+                    SolutionRaisingStatus raisingStatus = SolutionValidator.GetSolutionRaisingStatus(Service, selectedSolution.OriginalSolutionName);
+                    if (raisingStatus == SolutionRaisingStatus.NotStarted)
                     {
-                        argsImportHolding.Result = false;
-                        argsImportHolding.Cancel = true;
-                        throw new Exception("Holding solution import failed or cancelled");
+                        bool success = SolutionManager.ImportSolution(Service, fps.HoldingSolutionFilePath, selectedSolution.OriginalSolutionName + "_Holding");
+                        if (!success)
+                        {
+                            argsImportHolding.Result = false;
+                            argsImportHolding.Cancel = true;
+                            throw new Exception("Holding solution import failed or cancelled");
+                        }
+                        else
+                        {
+                            argsImportHolding.Result = true;
+                            argsImportHolding.Cancel = false;
+                        }
                     }
                     else
                     {
@@ -213,18 +240,27 @@ namespace XrmSolutionsUK.XrmToolBoxPlugins.ManagedSolutionLayerRaiser
 
         private void ReinstallOriginalSolution()
         {
-            LogInfo(string.Format("Step 3 of 4: Importing {0} managed solution", selectedSolution.UniqueName));
+            LogInfo(string.Format("Step 3 of 4: Importing {0} managed solution", selectedSolution.OriginalSolutionName));
             WorkAsync(new WorkAsyncInfo
             {
-                Message = string.Format("Step 3 of 4: Importing {0} managed solution", selectedSolution.UniqueName),
+                Message = string.Format("Step 3 of 4: Importing {0} managed solution", selectedSolution.OriginalSolutionName),
                 Work = (worker, argsReinstallOriginal) =>
                 {
-                    bool success = SolutionManager.ImportSolution(Service, fps.OriginalSolutionFilePath, selectedSolution.UniqueName);
-                    if (!success)
+                    SolutionRaisingStatus raisingStatus = SolutionValidator.GetSolutionRaisingStatus(Service, selectedSolution.OriginalSolutionName);
+                    if (raisingStatus == SolutionRaisingStatus.HoldingSolutionInstalledOriginalSolutionUninstalled)
                     {
-                        argsReinstallOriginal.Result = false;
-                        argsReinstallOriginal.Cancel = true;
-                        throw new Exception("Reinstall of original solution failed or cancelled");
+                        bool success = SolutionManager.ImportSolution(Service, fps.OriginalSolutionFilePath, selectedSolution.OriginalSolutionName);
+                        if (!success)
+                        {
+                            argsReinstallOriginal.Result = false;
+                            argsReinstallOriginal.Cancel = true;
+                            throw new Exception("Reinstall of original solution failed or cancelled");
+                        }
+                        else
+                        {
+                            argsReinstallOriginal.Result = true;
+                            argsReinstallOriginal.Cancel = false;
+                        }
                     }
                     else
                     {
@@ -262,7 +298,7 @@ namespace XrmSolutionsUK.XrmToolBoxPlugins.ManagedSolutionLayerRaiser
                 IsCancelable = false,
                 PostWorkCallBack = (args) =>
                 {
-                    if (args.Error != null)
+                    if (args.Error != null || (bool)args.Result == false)
                     {
                         LogError(string.Format("Error raising managed solution layer: {0}", args.Error.ToString()));
                         MessageBox.Show(args.Error.Message.ToString(), "Solution Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -354,6 +390,7 @@ namespace XrmSolutionsUK.XrmToolBoxPlugins.ManagedSolutionLayerRaiser
                             solutionsBindingSource.DataSource = solutions;
                             solutionsGridView.DataSource = solutionsBindingSource;
                             solutionsGridView.Columns[0].Visible = false;
+                            solutionsGridView.Columns[3].Visible = false;
                             foreach (DataGridViewColumn column in solutionsGridView.Columns)
                             {
                                 if (column.Index != 1)
