@@ -31,7 +31,7 @@ namespace XrmSolutionsUK.XrmToolBoxPlugins.ManagedSolutionLayerRaiser
 
         public string EmailAccount => "info@xrmsolutionsuk.com";
 
-        public string HelpUrl => "https://www.xrmsolutionsuk.com/blog/managed-solution-layer-raiser/";
+        public string HelpUrl => "https://github.com/xrmsolutionsuk/XrmToolBoxPlugins#managed-solution-layer-raiser";
 
         public PluginControl()
         {

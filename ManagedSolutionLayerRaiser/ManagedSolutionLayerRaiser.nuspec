@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
   <metadata>
     <id>XrmSolutionsUK.XrmToolBoxPlugins.ManagedSolutionLayerRaiser</id>
-    <version>1.2024.10.1</version>
+    <version>1.2026.07.1</version>
     <title>Managed Solution Layer Raiser</title>
     <authors>Parvez Ghumra @ XRM Solutions UK</authors>
     <owners>Parvez Ghumra @ XRM Solutions UK</owners>
@@ -12,8 +12,9 @@
     <description>Quickly, easily and safely raise your organization-owned managed solutions to the top of the stack of managed layers to resolve environmental inconsistency and make your application behave as designed</description>
     <releaseNotes>
       15/10/2024 - Version 1.2024.10.1 of Managed Solution Layer Raiser XrmToolBox tool releases with additional resilience changes.
+      11/07/2026 - Version 1.2026.07.1 of Managed Solution Layer Raiser XrmToolBox tool releases with updated help link pointing to repository README (rather than removed blogpost) and updated logo.
     </releaseNotes>
-    <copyright>Copyright XRM Solutions UK © 2023</copyright>
+    <copyright>Copyright XRM Solutions UK © 2026</copyright>
     <tags>XrmToolBox ManagedSolution SolutionFramework</tags>
     <dependencies>
       <dependency id="XrmToolBox" version="1.2023.10.67"></dependency>
